@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>North Lawndale Community Asset Map — DESOB 4101</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f4f4f2; color: #1a1a1a; }
+#header { background: #111; color: #fff; padding: 14px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+#header h1 { font-size: 16px; font-weight: 500; letter-spacing: 0.01em; flex: 1; }
+#header p { font-size: 12px; color: #999; }
+#toolbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: #fff; border-bottom: 1px solid #e5e5e5; flex-wrap: wrap; }
+.type-filter { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid #ddd; background: #f5f5f5; color: #555; cursor: pointer; transition: all 0.15s; }
+.filter-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+#add-btn { font-size: 12px; padding: 6px 14px; border-radius: 8px; border: 1px solid #bbb; background: #fff; color: #222; cursor: pointer; white-space: nowrap; font-weight: 500; }
+#add-btn:hover { background: #f0f0f0; }
+#count-badge { font-size: 12px; color: #888; white-space: nowrap; }
+#map { height: calc(100vh - 100px); }
+.legend { background: white; padding: 10px 14px; border-radius: 8px; border: 1px solid #ddd; font-size: 12px; line-height: 1.8; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+/* Popup */
+.leaflet-popup-content-wrapper { border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.14); border: 1px solid #e0e0e0; padding: 0; overflow: hidden; }
+.leaflet-popup-content { margin: 0; width: 280px !important; }
+.popup-header { padding: 14px 16px 10px; }
+.popup-type { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; display: inline-block; margin-bottom: 8px; letter-spacing: 0.04em; text-transform: uppercase; }
+.popup-name { font-size: 16px; font-weight: 600; color: #111; margin-bottom: 3px; line-height: 1.3; }
+.popup-student { font-size: 12px; color: #888; margin-bottom: 6px; }
+.popup-address { font-size: 12px; color: #777; margin-bottom: 0; }
+.popup-body { padding: 0 16px 12px; }
+.popup-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #aaa; margin: 10px 0 3px; }
+.popup-section-text { font-size: 12px; color: #444; line-height: 1.55; }
+hr.popup-hr { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0 0; }
+.pdf-row { padding: 10px 16px; background: #fafafa; border-top: 1px solid #eee; display: flex; align-items: center; gap: 8px; }
+.pdf-link { font-size: 12px; color: #185fa5; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+.pdf-link:hover { text-decoration: underline; }
+.pdf-none { font-size: 11px; color: #bbb; font-style: italic; }
+
+/* Modal */
+#modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; }
+#modal-bg.open { display: flex; }
+#modal { background: #fff; border-radius: 14px; padding: 22px; width: 380px; max-height: 90vh; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+#modal h4 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+.fl { font-size: 12px; color: #777; margin-bottom: 4px; margin-top: 12px; font-weight: 500; }
+.fl:first-of-type { margin-top: 0; }
+#modal input, #modal select, #modal textarea { width: 100%; font-size: 13px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; color: #1a1a1a; font-family: inherit; }
+#modal input:focus, #modal select:focus, #modal textarea:focus { outline: none; border-color: #888; background: #fff; }
+#modal textarea { resize: vertical; min-height: 72px; }
+.modal-note { font-size: 11px; color: #999; margin-top: 5px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 8px; margin-top: 18px; }
+.modal-actions button { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid #ddd; font-size: 13px; cursor: pointer; font-family: inherit; font-weight: 500; }
+#save-btn { background: #111; color: #fff; border-color: #111; }
+#save-btn:hover { background: #333; }
+#cancel-btn { background: #f5f5f5; color: #555; }
+.err { font-size: 11px; color: #c0392b; margin-top: 3px; display: none; }
+.err.show { display: block; }
+.click-hint { text-align: center; font-size: 11px; color: #aaa; padding: 5px 0 0; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1>North Lawndale Community Asset Map</h1>
+    <p>DESOB 4101 — Social Engagement Studio — How Spaces Stay Alive</p>
+  </div>
+  <span id="count-badge"></span>
+</div>
+
+<div id="toolbar">
+  <div class="type-filter">
+    <button class="filter-btn active" data-type="all">All</button>
+    <button class="filter-btn" data-type="space">Space</button>
+    <button class="filter-btn" data-type="organization">Organization</button>
+    <button class="filter-btn" data-type="person">Person</button>
+    <button class="filter-btn" data-type="object">Object / Infrastructure</button>
+  </div>
+  <button id="add-btn">+ Add asset</button>
+</div>
+
+<div id="map"></div>
+
+<div id="modal-bg">
+  <div id="modal">
+    <h4>Add a community asset</h4>
+    <div class="fl">Asset name *</div>
+    <input id="f-name" type="text" placeholder="e.g. Working Bikes" />
+    <div class="err" id="err-name">Enter an asset name.</div>
+
+    <div class="fl">Your name *</div>
+    <input id="f-student" type="text" placeholder="First name + last initial" />
+    <div class="err" id="err-student">Enter your name.</div>
+
+    <div class="fl">Type *</div>
+    <select id="f-type">
+      <option value="">-- select one --</option>
+      <option value="space">Space</option>
+      <option value="organization">Organization</option>
+      <option value="person">Person</option>
+      <option value="object">Object / Infrastructure</option>
+    </select>
+    <div class="err" id="err-type">Select an asset type.</div>
+
+    <div class="fl">Address or cross-streets</div>
+    <input id="f-address" type="text" placeholder="e.g. 1300 S Pulaski Rd" />
+
+    <div class="fl">Connection to craft, care, or stewardship</div>
+    <textarea id="f-craft" placeholder="How does this relate to the course theme?"></textarea>
+
+    <div class="fl">Community impact</div>
+    <textarea id="f-impact" placeholder="How does it influence the neighborhood?"></textarea>
+
+    <div class="fl">How you verified it</div>
+    <input id="f-verified" type="text" placeholder="e.g. visited in person, recent Instagram" />
+
+    <div class="fl">Link to your submitted PDF (optional)</div>
+    <input id="f-pdf" type="text" placeholder="Google Drive or Canvas link" />
+    <div class="modal-note">Set your Google Drive PDF to "anyone with the link can view" before pasting.</div>
+    <div class="click-hint">📍 Tip: click a spot on the map first to auto-place your pin there.</div>
+
+    <div class="modal-actions">
+      <button id="cancel-btn">Cancel</button>
+      <button id="save-btn">Save asset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPE_COLORS = {
+  space:        { fill: '#1d9e75', ring: '#085041', bg: '#e1f5ee', text: '#085041', label: 'Space' },
+  organization: { fill: '#378add', ring: '#0c447c', bg: '#e6f1fb', text: '#0c447c', label: 'Organization' },
+  person:       { fill: '#ba7517', ring: '#412402', bg: '#faeeda', text: '#412402', label: 'Person' },
+  object:       { fill: '#7f77dd', ring: '#26215c', bg: '#eeedfe', text: '#26215c', label: 'Object / Infra' },
+};
+
+// ── STUDENT ASSETS (pre-loaded) ──────────────────────────────────────────────
+const ASSETS = [
+  // YUBIN CHO — submission 1
+  {
+    id: 's1',
+    name: 'Sweet Beginnings, LLC (beelove)',
+    student: 'Yubin Cho',
+    type: 'organization',
+    address: 'North Lawndale Employment Network campus, North Lawndale',
+    lat: 41.8560, lng: -87.7170,
+    craft: 'Trains residents — primarily people returning from incarceration — in beekeeping and the craft of producing honey and honey-based skincare products. Participants learn hive maintenance, harvesting, product formulation, and packaging over a 90-day paid program. The apiaries themselves require ongoing physical care and stewardship, tying craft directly to workforce reentry.',
+    impact: 'Has provided paid job training and a documented pathway to employment for more than 1,000 people with criminal records since 2004. Models a form of community stewardship where care for land, insects, and people are treated as a single connected practice, and funds itself partly through product sales.',
+    verified: 'Checked NLEN\'s website (nlen.org) for active 2026 programming and press mentions from March and January 2026 via CBS News Chicago. Cross-referenced with an independent funder profile from REDF.',
+    pdf: ''
+  },
+  // YUBIN CHO — submission 2
+  {
+    id: 's2',
+    name: 'Lawndale Pop Up Spot',
+    student: 'Yubin Cho',
+    type: 'space',
+    address: 'Love Blooms Here Plaza, Douglas Blvd & Central Park Ave, North Lawndale',
+    lat: 41.8545, lng: -87.7220,
+    craft: 'A shipping container converted into an accessible neighborhood museum — itself a work of craft and adaptive reuse. Hosts 6–8 rotating exhibitions per year made by and with West Side artists, and runs regular public programs (Fridays on the Plaza, Sundays on the Boulevard). Teaches community members skills in exhibition making, installation, and promotion.',
+    impact: 'Turns an underused public plaza into an ongoing site of neighborhood-authored culture, free public events, and informal gathering. Recent programming includes an exhibition on Chicago\'s urban tree canopy and a Portal Project linking North Lawndale residents with artists in other cities affected by systemic violence.',
+    verified: 'Checked lawndalepopupspot.org for active events calendar running through late 2025. Found independent coverage from Block Club Chicago (April 2025), Chicago Tribune (June 2024), and WGN Radio (June 2024).',
+    pdf: ''
+  },
+  // YUBIN CHO — submission 3
+  {
+    id: 's3',
+    name: 'TREEmendous Lawndale (NLCCC GROWSS)',
+    student: 'Yubin Cho',
+    type: 'organization',
+    address: '3601 W Douglas Blvd (based at Lawndale Pop Up Spot), North Lawndale',
+    lat: 41.8538, lng: -87.7235,
+    craft: 'Trains resident volunteers as Tree Ambassadors who request, plant, and care for parkway trees through Chicago\'s 311 system, partnering with the Morton Arboretum\'s Chicago Region Trees Initiative. A direct continuation of the 2017 Oaks of North Lawndale initiative, itself inspired by Joseph Beuys\'s 7000 Oaks and developed in partnership with SAIC.',
+    impact: 'Maintains and rebuilds North Lawndale\'s tree canopy, distributes free native trees and shrubs to residents, and runs Litter Free Lawndale alongside an annual Douglass Park clean-up. Models environmental stewardship controlled and sustained by residents rather than city services alone.',
+    verified: 'Checked nlcccgrowss.org, which describes 2026 workshop planning and lists a specific tree/shrub distribution event on July 7, 2026 at the Lawndale Pop Up Spot, plus a full 2025 event history.',
+    pdf: ''
+  },
+  // CELIA GAITONDE — submission 1
+  {
+    id: 's4',
+    name: 'Light Up Lawndale',
+    student: 'Celia G.',
+    type: 'organization',
+    address: '2653 W Ogden Ave, Chicago IL 60608',
+    lat: 41.8585, lng: -87.6960,
+    craft: 'A nonprofit dedicated to strengthening the West Side community through education, engagement, housing, and development. Advocates for the "Fix Our Homes" coalition, which would provide low-income senior homeowners with up to $40,000 in basic home repairs by qualified specialists, directly connecting craft labor to community care.',
+    impact: 'Founded in 2020 by Schanel "Princess" Shaw during the holiday season to promote unity, it has grown to support other organizations in North Lawndale and the south side. Addresses housing repair as a form of ongoing community stewardship for vulnerable residents.',
+    verified: 'Organization website and public nonprofit records.',
+    pdf: ''
+  },
+  // CELIA GAITONDE — submission 2
+  {
+    id: 's5',
+    name: 'CYC-Sidney Epstein Youth Center',
+    student: 'Celia G.',
+    type: 'space',
+    address: '3415 W 13th Place, Chicago IL 60623',
+    lat: 41.8604, lng: -87.7148,
+    craft: 'Has served the North Lawndale community since 1956. Provides a Maker Lab, nationally-recognized community garden, computer labs, expertly-staffed classrooms, and a gymnasium. The Maker Lab in particular supports hands-on craft skill-building for youth.',
+    impact: 'Serves more than 200 new students per year, providing early learning and out-of-school programming for young people. A long-standing institution modeling sustained institutional care for neighborhood children.',
+    verified: 'Chicago Youth Centers website and organization history.',
+    pdf: ''
+  },
+  // CELIA GAITONDE — submission 3
+  {
+    id: 's6',
+    name: 'Fuel Movement Community Center',
+    student: 'Celia G.',
+    type: 'organization',
+    address: '4244 W Cermak Rd, Chicago IL 60623',
+    lat: 41.8508, lng: -87.7298,
+    craft: 'Founded by Executive Director Darrell Glover, a lifelong North Lawndale resident and pastor, to create ripple effects in families supporting their community. Responds to North Lawndale\'s limited access to healthcare, food deserts, housing and safety issues, and underfunded schools.',
+    impact: 'Supports approximately 1,000 families per year through multiple programs and funding resources. Uses a multiplier model: supported teenagers become mentors for younger children, sustaining the community care network across generations.',
+    verified: 'Organization website and community reports.',
+    pdf: ''
+  }
+];
+
+let assets = [...ASSETS];
+let activeFilter = 'all';
+let pendingLatLng = null;
+let markers = {};
+let map;
+
+function svgPin(c) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36">
+    <path d="M14 0C6.27 0 0 6.27 0 14c0 9.33 14 22 14 22S28 23.33 28 14C28 6.27 21.73 0 14 0z" fill="${c.fill}"/>
+    <circle cx="14" cy="14" r="7" fill="${c.bg}"/>
+    <circle cx="14" cy="14" r="4" fill="${c.fill}"/>
+  </svg>`;
+}
+
+function makeIcon(type) {
+  const c = TYPE_COLORS[type] || TYPE_COLORS.space;
+  return L.divIcon({ html: svgPin(c), className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38] });
+}
+
+function buildPopup(a) {
+  const c = TYPE_COLORS[a.type] || TYPE_COLORS.space;
+  const pdfRow = a.pdf
+    ? `<div class="pdf-row"><a class="pdf-link" href="${a.pdf}" target="_blank">📄 View submitted PDF →</a></div>`
+    : `<div class="pdf-row"><span class="pdf-none">No PDF linked</span></div>`;
+  return `
+    <div class="popup-header">
+      <div class="popup-type" style="background:${c.bg};color:${c.text}">${c.label}</div>
+      <div class="popup-name">${a.name}</div>
+      <div class="popup-student">Documented by ${a.student}</div>
+      ${a.address ? `<div class="popup-address">📍 ${a.address}</div>` : ''}
+    </div>
+    <div class="popup-body">
+      ${a.craft ? `<div class="popup-section-label">Craft, care & stewardship</div><div class="popup-section-text">${a.craft}</div>` : ''}
+      ${a.impact ? `<div class="popup-section-label">Community impact</div><div class="popup-section-text">${a.impact}</div>` : ''}
+      ${a.verified ? `<div class="popup-section-label">Verified by</div><div class="popup-section-text">${a.verified}</div>` : ''}
+    </div>
+    ${pdfRow}`;
+}
+
+function updateCount() {
+  const n = assets.length;
+  document.getElementById('count-badge').textContent = n + ' asset' + (n !== 1 ? 's' : '') + ' mapped';
+}
+
+function renderMarkers() {
+  Object.values(markers).forEach(m => map.removeLayer(m));
+  markers = {};
+  const visible = activeFilter === 'all' ? assets : assets.filter(a => a.type === activeFilter);
+  visible.forEach(a => {
+    const m = L.marker([a.lat, a.lng], { icon: makeIcon(a.type) })
+      .addTo(map)
+      .bindPopup(buildPopup(a), { maxWidth: 300, className: 'asset-popup' });
+    markers[a.id] = m;
+  });
+  updateCount();
+}
+
+function initMap() {
+  map = L.map('map', { zoomControl: true }).setView([41.856, -87.718], 14);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Legend
+  const legend = L.control({ position: 'bottomright' });
+  legend.onAdd = function() {
+    const div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = Object.entries(TYPE_COLORS).map(([k, c]) =>
+      `<div class="legend-item"><div class="legend-dot" style="background:${c.fill}"></div><span style="font-size:12px;color:#444">${c.label}</span></div>`
+    ).join('');
+    return div;
+  };
+  legend.addTo(map);
+
+  map.on('click', function(e) {
+    pendingLatLng = e.latlng;
+    openModal();
+  });
+
+  renderMarkers();
+}
+
+function openModal() {
+  ['name','student','type','address','craft','impact','verified','pdf'].forEach(f => {
+    document.getElementById('f-' + f).value = '';
+  });
+  ['name','student','type'].forEach(f => {
+    document.getElementById('err-' + f).classList.remove('show');
+  });
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+document.getElementById('cancel-btn').addEventListener('click', () => {
+  pendingLatLng = null;
+  document.getElementById('modal-bg').classList.remove('open');
+});
+
+document.getElementById('modal-bg').addEventListener('click', function(e) {
+  if (e.target === this) { pendingLatLng = null; this.classList.remove('open'); }
+});
+
+document.getElementById('add-btn').addEventListener('click', () => {
+  pendingLatLng = map.getCenter();
+  openModal();
+});
+
+document.getElementById('save-btn').addEventListener('click', () => {
+  const name = document.getElementById('f-name').value.trim();
+  const student = document.getElementById('f-student').value.trim();
+  const type = document.getElementById('f-type').value;
+  let ok = true;
+  if (!name) { document.getElementById('err-name').classList.add('show'); ok = false; } else document.getElementById('err-name').classList.remove('show');
+  if (!student) { document.getElementById('err-student').classList.add('show'); ok = false; } else document.getElementById('err-student').classList.remove('show');
+  if (!type) { document.getElementById('err-type').classList.add('show'); ok = false; } else document.getElementById('err-type').classList.remove('show');
+  if (!ok) return;
+
+  const a = {
+    id: 'u' + Date.now(),
+    name, student, type,
+    address: document.getElementById('f-address').value.trim(),
+    lat: pendingLatLng ? pendingLatLng.lat : map.getCenter().lat,
+    lng: pendingLatLng ? pendingLatLng.lng : map.getCenter().lng,
+    craft: document.getElementById('f-craft').value.trim(),
+    impact: document.getElementById('f-impact').value.trim(),
+    verified: document.getElementById('f-verified').value.trim(),
+    pdf: document.getElementById('f-pdf').value.trim(),
+  };
+  assets.push(a);
+  pendingLatLng = null;
+  document.getElementById('modal-bg').classList.remove('open');
+  renderMarkers();
+  setTimeout(() => { if (markers[a.id]) markers[a.id].openPopup(); }, 100);
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    activeFilter = this.dataset.type;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    renderMarkers();
+  });
+});
+
+window.addEventListener("load", initMap);
+</script>
+</body>
+</html>
