@@ -60,6 +60,21 @@ hr.popup-hr { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0 0; }
 .err { font-size: 11px; color: #c0392b; margin-top: 3px; display: none; }
 .err.show { display: block; }
 .click-hint { text-align: center; font-size: 11px; color: #aaa; padding: 5px 0 0; }
+
+  .nl-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-size: 11px;
+    font-weight: 600;
+    color: #9a7a00;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  .nl-label::before { display: none; }
+
 </style>
 </head>
 <body>
@@ -217,6 +232,286 @@ const ASSETS = [
     impact: 'Supports approximately 1,000 families per year through multiple programs and funding resources. Uses a multiplier model: supported teenagers become mentors for younger children, sustaining the community care network across generations.',
     verified: 'Organization website and community reports.',
     pdf: ''
+  },
+  {
+    id: 'n01', name: 'UCAN', student: 'Fallon E.',
+    type: 'organization',
+    address: '3605 W Fillmore St, Chicago IL 60624',
+    lat: 41.8662, lng: -87.7185,
+    craft: 'Provides youth leadership programs, mentoring, and community service opportunities. Offers programs like Project Visible Man and Phenomenal Woman, pairing youth with community mentors. Also supports adults seeking foster care licensing and mental health counseling.',
+    impact: 'Serves as a space for young adults in the area beyond school, work, or home. Connects youth with mentors and community resources.',
+    verified: 'News page updated weekly; upcoming event listed for September 12, 2026.',
+    pdf: ''
+  },
+  {
+    id: 'n02', name: 'Fuel Movement Community Center', student: 'Fallon E.',
+    type: 'organization',
+    address: '4246 W Cermak Rd, Chicago IL 60623',
+    lat: 41.8509, lng: -87.7301,
+    craft: 'Founded by lifelong North Lawndale resident Darrell Glover to create ripple effects in families. Addresses healthcare access, food deserts, housing, safety, and underfunded schools through counselors, mentors, food pantries, and job training.',
+    impact: 'Supports approximately 1,000 families per year. Uses a multiplier model where supported teens become mentors for younger children. Featured on WGN9 in July 2026 for a food distribution event.',
+    verified: 'News articles from 2023 onward; CBS News and WGN9 coverage from July 2026.',
+    pdf: ''
+  },
+  {
+    id: 'n03', name: 'Illinois Action for Children (NL Community Connections)', student: 'Fallon E.',
+    type: 'organization',
+    address: '4753 N Broadway, Chicago IL 60640',
+    lat: 41.8655, lng: -87.72,
+    craft: 'Runs programs tailored to North Lawndale residents including Parent University Chicago West, a Chronic Absenteeism Initiative serving k-3 students, and the North Lawndale Early Learning Collaboration. Partners with local schools to provide family support and basic necessities.',
+    impact: 'Helps chronically absent k-3 students by working directly with school staff and families. Constantly updating programs and advocating on behalf of Illinois families.',
+    verified: 'Active programs, blogs, and policy statements on the organization website.',
+    pdf: ''
+  },
+  {
+    id: 'n04', name: 'Carole Robertson Center for Learning', student: 'Heeseung J.',
+    type: 'space',
+    address: '3701 W Ogden Ave, Chicago IL 60623',
+    lat: 41.8576, lng: -87.7193,
+    craft: 'Nearly 50-year-old care-labor institution providing full-day, year-round care for children 6 weeks to 5 years, out-of-school programming for ages 5-17, and home visiting for expectant parents. Represents sustained, everyday care work that maintains the social fabric of the neighborhood.',
+    impact: 'Functions as a trusted neighborhood anchor, supporting children\'s development while enabling caregivers\' economic participation. Frames childcare as a community right rather than a private burden.',
+    verified: 'Official website listing current 2026 programming at the 3701 W. Ogden Ave North Lawndale flagship; registered Illinois licensed childcare provider.',
+    pdf: ''
+  },
+  {
+    id: 'n05', name: 'Lawndale Christian Development Corporation (LCDC)', student: 'Heeseung J.',
+    type: 'organization',
+    address: '3860 W Ogden Ave, Chicago IL 60623',
+    lat: 41.8573, lng: -87.7218,
+    craft: 'Founded in 1987; has rehabbed and sold 183 single-family homes, condos, and two-flats, and manages roughly 175 affordable units. Actively repairs and maintains the neighborhood\'s aging greystones. The 2024 Lazarus Apartments renovation paired building repair with 25+ integrated glass murals and mosaics.',
+    impact: 'Nearly $120 million in residential and commercial development pursued as "development without displacement," sustaining both the physical building stock and the ownership base of North Lawndale.',
+    verified: 'Official website plus Chicago Sun-Times and WBEZ June 2026 ribbon-cutting coverage; Lawndale News Feb/March 2026 award coverage; Chicago Sun-Times March 2025 Lazarus Apartments murals coverage.',
+    pdf: ''
+  },
+  {
+    id: 'n06', name: 'Open Books', student: 'Heeseung J.',
+    type: 'space',
+    address: '812 W 16th St, Chicago IL 60623',
+    lat: 41.8601, lng: -87.6503,
+    craft: 'Opened in 2023 as a non-school, drop-in space for youth and families, pairing literacy care with hands-on making, artmaking, creative writing, letter beading, and "tinker and build" activities.',
+    impact: 'Distributed roughly 160,000 books within the neighborhood through the North Lawndale Reads campaign. Provides a safe, welcoming after-school environment contributing to measurable literacy gains.',
+    verified: 'Official website for current programs; Austin Weekly News October 2025 and Block Club Chicago June 2025 coverage.',
+    pdf: ''
+  },
+  {
+    id: 'n07', name: 'The Firehouse Community Arts Center', student: 'Damla K.',
+    type: 'organization',
+    address: '2111 S Hamlin Ave, Chicago IL 60629',
+    lat: 41.8484, lng: -87.7241,
+    craft: 'Created by Pastor Phil Jackson in 2003, uses year-round cultural programs, mentorship, leadership training, workforce development, and artistic events to interrupt cycles of violence. The PAC (Purpose Authority Character) program guides participants through outreach, transformation, and employment over 10 months.',
+    impact: 'A hub for youth across the city. Has a 70% job placement rate for peace ambassadors, including people formerly incarcerated or on probation. Last Instagram post August 25, 2026 for a Block Party for Peace event.',
+    verified: 'Active Instagram (@_thefirehouse_) with post dated August 25, 2026.',
+    pdf: ''
+  },
+  {
+    id: 'n08', name: 'Chicago Urban Art Retreat Center (CUARC)', student: 'Damla K.',
+    type: 'space',
+    address: '1957 S Spaulding Ave, Chicago IL 60623',
+    lat: 41.8494, lng: -87.7157,
+    craft: 'Volunteer-run nonprofit that values art-making, social justice, stewardship, and maintenance. Operates the Differently Minded Art Studio, Florence Gardens (pesticide-free garden with murals and sculptures), and Athena\'s House (women\'s residence). Volunteers used recycled materials to create the Obama, Morrison, and Angelou sculptures in Florence Gardens.',
+    impact: 'Brings people together through socially impacting art, creative workshops, women\'s retreats, and volunteer opportunities. Has studio Will Travel program collaborates with other non-artistic organizations across the community.',
+    verified: 'Facebook page (Chicago Urban Art Retreat Center) with last post July 13, 2026 for Squeaky Fest.',
+    pdf: ''
+  },
+  {
+    id: 'n09', name: 'Mothers Healing Circle', student: 'Damla K.',
+    type: 'organization',
+    address: 'Nichols Tower, 3500 W Palmer St, Chicago IL 60647',
+    lat: 41.871, lng: -87.7148,
+    craft: 'Founded by Chicago artist Sonja Henderson in 2020 in response to trauma experienced by mothers in Lawndale who lost children to violence. Uses craft — sewing, quilting, weaving, printmaking — as a physical way to process memories. The "We Are Made From Stars" quilt flags transform private grief into public memorials and community storytelling.',
+    impact: 'Addresses trauma collectively through relationships, care, and craft. Also distributes food and medical or childcare supplies. Installations remain up in North Lawndale.',
+    verified: 'Installations confirmed still up in North Lawndale as of submission.',
+    pdf: ''
+  },
+  {
+    id: 'n10', name: 'Sears Sunken Garden', student: 'Kylie Kim',
+    type: 'object',
+    address: '3330 W Arthington St, Chicago IL 60624',
+    lat: 41.8689, lng: -87.714,
+    craft: 'Built in 1907 as part of the Sears, Roebuck and Co. campus. Features a 100ft pergola with concrete columns, wooden supports, and a red clay tile roof. Active restoration began April 2026: repairing concrete columns, replacing damaged wood trusses, replacing roof tiles, removing old paint, adding new lighting — preserving as much original design as possible.',
+    impact: 'Restoration preserves an important part of North Lawndale\'s history and brings an old landscape back into use. Friends of Sears Sunken Garden is pursuing larger restoration including new planting, accessible paths, and garden improvements.',
+    verified: 'Chicago Sun-Times reported restoration officially began April 17, 2026; Landmarks Illinois also reported the start of the project.',
+    pdf: ''
+  },
+  {
+    id: 'n11', name: 'Stone Temple Peace Heritage Garden', student: 'Kylie Kim',
+    type: 'space',
+    address: '3618-3622 W Douglas Blvd, Chicago IL 60623',
+    lat: 41.854, lng: -87.721,
+    craft: 'Created from a neglected lot through collaboration between Stone Temple Missionary Baptist Church and Chicago Sinai Congregation. Volunteers plant, weed, maintain, and harvest during the growing season. In spring 2026, partnered with Mobile Makers for an intergenerational design-build program where teens and adults designed and built a garden sanctuary using an existing vacant lot and shipping container.',
+    impact: 'Provides green space and shared food resources; produce is shared free with North Lawndale residents. Also hosts musical performances, cookouts, poetry sessions, and community gatherings.',
+    verified: 'Confirmed via Chicago Sinai Congregation (active volunteer project with regular planting-season workdays) and a 2026 Mobile Makers program (April 25-May 30, 2026).',
+    pdf: ''
+  },
+  {
+    id: 'n12', name: 'Garden 2 Table Farm', student: 'Kylie Kim',
+    type: 'space',
+    address: '1431-1441 S Harding St, Chicago IL',
+    lat: 41.8609, lng: -87.7272,
+    craft: 'Part of the Garden 2 Table Pipeline, a network of 23 community gardens across North Lawndale. Has 20 community garden beds and an agriculture pod for year-round food production. In 2026, expanding with a greenhouse and new farm structure for offices, workshops, and presentations.',
+    impact: 'Connects smaller gardens into a larger food system. Produce shared within the neighborhood; network connects with local organizations providing meals and food access. Combines land care with a practical community need.',
+    verified: 'Austin Weekly News article February 2026 identifying the farm and describing expansion; North Lawndale Greening Committee website confirming active status with 23 gardens.',
+    pdf: ''
+  },
+  {
+    id: 'n13', name: 'Stone Temple Peace Heritage Garden', student: 'Olivia L.',
+    type: 'space',
+    address: '3618 W Douglas Blvd, North Lawndale',
+    lat: 41.8541, lng: -87.7212,
+    craft: 'Community garden, gathering space, and education center created through collaboration between Stone Temple Missionary Baptist Church and Chicago Sinai Congregation starting in 2019. Volunteers from the neighborhood — adults and children — plant, weed, water, and maintain the space. Food grown is offered free to North Lawndale residents.',
+    impact: 'Also hosts musical performances, cookouts, outdoor meetings, and poetry sessions, giving people opportunities to gather and build connections with neighbors.',
+    verified: 'Checked address and location; cross-referenced articles and information about North Lawndale neighborhood.',
+    pdf: ''
+  },
+  {
+    id: 'n14', name: 'YMEN Bike Box', student: 'Olivia L.',
+    type: 'object',
+    address: '13th St & Pulaski Rd, North Lawndale',
+    lat: 41.8608, lng: -87.7262,
+    craft: 'Community bicycle lending library and repair shop operated in partnership with the Young Men\'s Educational Network (YMEN) and Working Bikes. Teaches people skills to repair and reuse bicycles. Community members can borrow bikes for free or buy used and donated bikes at low prices.',
+    impact: 'Helps people stay mobile and active — addressing obesity as one of the biggest issues in North Lawndale. Directly connects to the craft of bicycle repair and material reuse.',
+    verified: 'Streetsblog Chicago and Chicago Community Gardeners Association coverage; website with information from August 9, 2026 confirming currently active.',
+    pdf: ''
+  },
+  {
+    id: 'n15', name: 'Southside Blooms', student: 'Olivia L.',
+    type: 'organization',
+    address: '4100 W Fillmore St, North Lawndale',
+    lat: 41.8666, lng: -87.73,
+    craft: 'Nonprofit flower business that turns trash-filled vacant lots into flower farms, providing job and training opportunities for young people. Started by Quilen and Hannah Blackwell through Chicago Eco House. Recently opened a new larger location at 4100 W. Fillmore St.',
+    impact: 'Creates jobs and teaches young people flower-making skills. Brings green space into the community. Co-founder Blackwell named CNN Hero of the Year in 2025.',
+    verified: 'June 24, 2026 article about new location; Fillmore Center website confirms currently active.',
+    pdf: ''
+  },
+  {
+    id: 'n16', name: 'Chicago Urban Art Retreat Center (CUARC)', student: 'Sean L.',
+    type: 'space',
+    address: '1957 S Spaulding Ave, Chicago IL 60623',
+    lat: 41.8495, lng: -87.7158,
+    craft: 'Non-profit valuing art-making, social justice, stewardship, and maintenance. Associates physical work with art and craft-making. Works on Peace Park (2101 S. Spaulding Ave) and Florence Gardens. Obama, Morrison, and Angelou sculptures in Florence Gardens were made by volunteers using recycled materials.',
+    impact: 'Helps maintain and create a visually pleasing environment while teaching residents to preserve beauty and repair their community using recycled materials.',
+    verified: 'Organization website and active social media presence.',
+    pdf: ''
+  },
+  {
+    id: 'n17', name: 'North Lawndale Whirligigs', student: 'Sean L.',
+    type: 'object',
+    address: 'Various locations in North Lawndale',
+    lat: 41.856, lng: -87.719,
+    craft: 'Collection of 8 kinetic sculptures that react and move with the wind, functioning as weather indicators. Each was designed by members and gardeners of the 8 communities they represent. All incorporate an Adinkra symbol, connecting to West African visual traditions. Documented by the GROWSS Committee/NLCCC.',
+    impact: 'Represents each community individually while connecting them — showing how communities can be used together harmoniously to achieve unity.',
+    verified: 'GROWSS Committee documentation; NLCCC records.',
+    pdf: ''
+  },
+  {
+    id: 'n18', name: 'BEET Chicago', student: 'Sean L.',
+    type: 'space',
+    address: '4056 W Cermak Rd, Chicago IL 60623',
+    lat: 41.8508, lng: -87.729,
+    craft: 'Bringing Empowerment and Education Together — community urban garden built on a former gravel lot. Demonstrates active stewardship through community-built raised beds and ongoing planting, watering, weeding, and harvesting. Part of North Lawndale\'s Garden 2 Table Pipeline.',
+    impact: 'Provides residents and volunteers opportunities to learn urban agriculture skills while producing fresh food for the community. Broadens the scope of community collaboration beyond art-making.',
+    verified: 'North Lawndale Garden 2 Table Pipeline listing confirms currently active role in neighborhood food production.',
+    pdf: ''
+  },
+  {
+    id: 'n19', name: 'Douglass (Anna and Frederick) Park', student: 'Janet M.',
+    type: 'space',
+    address: '1401 S Sacramento Dr, Chicago IL 60623',
+    lat: 41.861, lng: -87.7023,
+    craft: 'A 162-acre historic regional park. Park supervisor is Shandrel Starks. Young visitors can play seasonal sports or take part in cultural programs including dance, art, performing arts, and theater. Summer youth day camp and specialty arts camps offered.',
+    impact: 'Partners with Chicago Bulls Basketball for a computer learning lab; with Ravinia for summer concerts and the annual Junta Hispana festival; with Greater Chicago Food Depository for monthly "Bring the Family to the Table" nutritional meals. Hosts Movies in the Park and Night Out in the Parks events.',
+    verified: 'Chicago Park District official website (chicagoparkdistrict.com).',
+    pdf: ''
+  },
+  {
+    id: 'n20', name: 'The Farm on Ogden', student: 'Janet M.',
+    type: 'space',
+    address: '3555 W Ogden Ave, Chicago IL 60623',
+    lat: 41.8566, lng: -87.716,
+    craft: 'Windy City Harvest\'s urban farm operated in partnership between the Chicago Botanic Garden and Lawndale Christian Health Center. Offers public tours of working urban farm and aquaponics system on Saturdays, adult education courses, certification programs, and youth enrichment workshops.',
+    impact: 'A community hub combining a farm, market, health programs, and job opportunities. Produce grown is sold at the on-site Farm on Ogden market.',
+    verified: 'Chicago Botanic Garden website (chicagobotanic.org/urban-agriculture/about).',
+    pdf: ''
+  },
+  {
+    id: 'n21', name: 'Starling by Duo', student: 'Janet M.',
+    type: 'space',
+    address: '3243 W 16th St, Chicago IL 60623',
+    lat: 41.86, lng: -87.713,
+    craft: 'Flexible community space for rent by the hour, led by Carlos Robles-Shanahan, Rafael Robles, and Karla Robles. Includes a library nook, open workshop area, sound studio, meeting room, outdoor terraces, and garden. Channels a portion of profits back to the community it serves.',
+    impact: 'Designed as a vessel for community ownership — the act of presence in the space earns a share of profits, breaking traditional barriers to investment.',
+    verified: 'Duo Development website (duodevelopment.org/starling).',
+    pdf: ''
+  },
+  {
+    id: 'n22', name: 'preSERVE Garden', student: 'Jason S.',
+    type: 'space',
+    address: '1231 S Central Park Ave, Chicago IL 60623',
+    lat: 41.8631, lng: -87.7189,
+    craft: 'Community garden that allows people to learn how to grow their own food within a shared space, connecting with others in the community in the process.',
+    impact: 'People build skills within gardening and create shared resources — food and flowers.',
+    verified: 'Instagram page (@slowfoodchicago) linked to their website, with a recent visit to the garden documented just days before submission.',
+    pdf: ''
+  },
+  {
+    id: 'n23', name: 'North Lawndale Greening Committee', student: 'Jason S.',
+    type: 'organization',
+    address: '3853 W Polk St, Chicago IL 60624',
+    lat: 41.8642, lng: -87.7224,
+    craft: 'Works with multiple community gardens while also organizing block parties and festivals. Helps beautify the area by maintaining lush gardens and bringing community together through events outside the garden.',
+    impact: 'Creates shared resources and festivals where the community can display art, music, and more.',
+    verified: 'Facebook page (North Lawndale Greening Committee) shows an event in early August 2026.',
+    pdf: ''
+  },
+  {
+    id: 'n24', name: 'Chicago Tool Library', student: 'Jason S.',
+    type: 'organization',
+    address: '4015 W Carroll Ave Suite 101, Chicago IL 60624',
+    lat: 41.8871, lng: -87.7258,
+    craft: 'Provides a space to learn about tools and equipment and create alongside community members. Offers classes for those unfamiliar with certain tools and lends over 3,000+ tools plus camping equipment.',
+    impact: 'Builds skills in tool and equipment usage while providing shared resources for the community.',
+    verified: 'Website lists upcoming events in the following days.',
+    pdf: ''
+  },
+  {
+    id: 'n25', name: 'African Heritage Garden', student: 'Sebastian S.',
+    type: 'space',
+    address: '1245 S Central Park Ave, Chicago IL 60623',
+    lat: 41.8632, lng: -87.7191,
+    craft: 'Community green area rich with plant life maintained by the community and the North Lawndale Greening Committee. Transformed from vacant lots to a lush garden. Hosts numerous varieties of flowers and vegetables provided by community members and partner organizations.',
+    impact: 'Serves as the community\'s reminder that preservation and community building can start with something as simple as growing something green.',
+    verified: 'neighbor-space.org; nlgreeningcommittee.org; Austin Weekly News Feb 2026; Archpaper Feb 2025.',
+    pdf: ''
+  },
+  {
+    id: 'n26', name: 'MLK Legacy Apartments', student: 'Sebastian S.',
+    type: 'object',
+    address: '1550 S Hamlin Ave, Chicago IL 60623',
+    lat: 41.8616, lng: -87.7241,
+    craft: 'Historical landmark that was once the home of Dr. Martin Luther King Jr. in the 1960s during his Chicago campaigns. Now an affordable housing complex. After many renovations and ownership changes, continues to provide affordable housing — a goal Dr. King fought for — alongside businesses and restaurants like the Soulfood Lounge.',
+    impact: 'Carries MLK\'s legacy by providing affordable housing for the community he once was part of. Houses North Lawndale\'s history from past to present.',
+    verified: 'kinglegacyapts.com; thecha.org; chicago.gov; WTTW January 2021 coverage.',
+    pdf: ''
+  },
+  {
+    id: 'n27', name: 'Homan Grown', student: 'Sebastian S.',
+    type: 'organization',
+    address: 'North Lawndale-based (serving greater Chicagoland)',
+    lat: 41.8555, lng: -87.723,
+    craft: 'Permaculture landscape design organization led by Filipino mother-daughter duo Annamarie Varona and Lucía León. Provides client-based and community gardening services — from pollinators and installations for individual clients to edible landscapes for entire communities. Has collaborated with SAIC on the Oaks of North Lawndale initiative.',
+    impact: 'Work and dedication to preserving natural land extends through greater Chicagoland and beyond North Lawndale.',
+    verified: 'homangrown.com; homangrown_chi Instagram; homansquare.org/oaks-of-north-lawndale-saic; MWRD Oaks of North Lawndale PDF.',
+    pdf: ''
+  },
+  {
+    id: 'n28', name: 'Slum Busters Garden', student: 'Sebastian S.',
+    type: 'space',
+    address: '1954 S Trumbull Ave, Chicago IL 60623',
+    lat: 41.8495, lng: -87.7103,
+    craft: 'Started in the late 1980s by Lorean and Gerald Earles. Located underneath the Pink Line, this local community garden focuses on beautifying North Lawndale and providing fresh vegetables. Hosts community events and volunteering opportunities for youth and elderly alike.',
+    impact: 'Even after the passing of the Earles, their legacy of beautifying the neighborhood continues through youth who fight for a greener future.',
+    verified: 'Facebook page (Historic Slumbusters Garden); slumbusters.net; nlgreeningcommittee.org.',
+    pdf: ''
   }
 ];
 
@@ -295,6 +590,31 @@ function initMap() {
     return div;
   };
   legend.addTo(map);
+
+
+  // North Lawndale neighborhood boundary
+  const nlBoundary = [
+    [41.8875, -87.7459], [41.8875, -87.7200], [41.8875, -87.7050],
+    [41.8850, -87.6955], [41.8820, -87.6847], [41.8720, -87.6847],
+    [41.8620, -87.6847], [41.8530, -87.6847], [41.8440, -87.6847],
+    [41.8430, -87.6980], [41.8420, -87.7100], [41.8415, -87.7200],
+    [41.8415, -87.7300], [41.8420, -87.7400], [41.8430, -87.7459],
+    [41.8530, -87.7459], [41.8630, -87.7459], [41.8730, -87.7459],
+    [41.8830, -87.7459], [41.8875, -87.7459]
+  ];
+
+  L.polygon(nlBoundary, {
+    color: '#c8a200',
+    weight: 2.5,
+    opacity: 0.9,
+    fillColor: '#f5d800',
+    fillOpacity: 0.07,
+    dashArray: '6, 4'
+  }).addTo(map).bindTooltip('North Lawndale', {
+    permanent: true,
+    direction: 'center',
+    className: 'nl-label'
+  });
 
   map.on('click', function(e) {
     pendingLatLng = e.latlng;
